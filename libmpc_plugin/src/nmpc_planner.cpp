@@ -55,6 +55,16 @@ namespace nmpc_planner
 		r = controller.step(modelX, r.cmd);
 	}
 
+	void NMPCPlanner::setReference(const Eigen::VectorXd& ref)
+	{
+		yref = ref;
+	}
+
+	void NMPCPlanner::setStateInput(const Eigen::VectorXd& input_state)
+	{
+		modelX = input_state;
+	}
+
 	Eigen::MatrixXd NMPCPlanner::getOptimalStates()
 	{
 		auto control_seq = controller.getOptimalSequence();

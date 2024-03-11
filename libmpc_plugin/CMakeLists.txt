@@ -15,6 +15,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 # Find the mpc++ package
 find_package(mpc++ CONFIG REQUIRED)
 
@@ -29,7 +30,7 @@ install(
   DESTINATION include
 )
 
-add_library(libmpc_plugin src/nmpc_planner.cpp)
+add_library(libmpc_plugin SHARED src/nmpc_planner.cpp)
 target_include_directories(libmpc_plugin PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
@@ -38,9 +39,9 @@ ament_target_dependencies(
     libmpc_plugin
     pluginlib
     mpc++
-  )
+  )  
 
-  pluginlib_export_plugin_description_file(libmpc_plugin plugins.xml)  
+pluginlib_export_plugin_description_file(libmpc_plugin plugins.xml)  
 
 install(
   TARGETS libmpc_plugin
@@ -48,11 +49,15 @@ install(
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
 )
+
+target_link_libraries(${PROJECT_NAME} mpc++ Eigen3::Eigen)
 
 ament_export_libraries(
   libmpc_plugin
 )
+
 ament_export_targets(
   export_${PROJECT_NAME}
 )

@@ -1,4 +1,8 @@
+#ifndef NMPC_PLANNER__NMPC_PLANNER_PLUGIN_HPP_
+#define NMPC_PLANNER__NMPC_PLANNER_PLUGIN_HPP_
+
 #include "libmpc_plugin/libmpc_base.hpp"
+#include <mpc/NLMPC.hpp>
 
 namespace nmpc_planner
 {
@@ -11,6 +15,8 @@ class NMPCPlanner : public libmpc::LibMPCBase
 			void stepController() override;
 			Eigen::MatrixXd getOptimalStates() override;
 			Eigen::MatrixXd getOptimalInputs() override;
+			void setReference(const Eigen::VectorXd&) override;
+			void setStateInput(const Eigen::VectorXd&) override;
 
 			//variables
 			const static int num_states = 4;
@@ -30,3 +36,5 @@ class NMPCPlanner : public libmpc::LibMPCBase
 							
 	};
 }
+
+#endif //NMPC_PLANNER__NMPC_PLANNER_PLUGIN_HPP_
