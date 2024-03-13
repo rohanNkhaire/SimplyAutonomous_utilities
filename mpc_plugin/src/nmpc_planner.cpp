@@ -1,11 +1,7 @@
-#include "libmpc_plugin/libmpc_base.hpp"
-#include "libmpc_plugin/nmpc_planner.hpp"
+#include "mpc_plugin/nmpc_planner.hpp"
 
 namespace nmpc_planner
 {
-	NMPCPlanner::NMPCPlanner()
-	{
-	}
 
 	void NMPCPlanner::initialize()
 	{
@@ -78,7 +74,3 @@ namespace nmpc_planner
 	}
 
 } // namespace nmpc_planner
-
-#include <pluginlib/class_list_macros.hpp>
-
-PLUGINLIB_EXPORT_CLASS(nmpc_planner::NMPCPlanner, libmpc::LibMPCBase)

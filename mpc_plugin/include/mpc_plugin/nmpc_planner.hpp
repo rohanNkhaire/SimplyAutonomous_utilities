@@ -1,7 +1,7 @@
 #ifndef NMPC_PLANNER__NMPC_PLANNER_PLUGIN_HPP_
 #define NMPC_PLANNER__NMPC_PLANNER_PLUGIN_HPP_
 
-#include "libmpc_plugin/libmpc_base.hpp"
+#include "mpc_plugin/mpc_base.hpp"
 #include <mpc/NLMPC.hpp>
 
 namespace nmpc_planner
@@ -9,7 +9,6 @@ namespace nmpc_planner
 class NMPCPlanner : public libmpc::LibMPCBase
 	{
 		public:
-			NMPCPlanner();
 
 			void initialize() override;
 			void stepController() override;
@@ -38,3 +37,7 @@ class NMPCPlanner : public libmpc::LibMPCBase
 }
 
 #endif //NMPC_PLANNER__NMPC_PLANNER_PLUGIN_HPP_
+
+#include <pluginlib/class_list_macros.hpp>
+
+PLUGINLIB_EXPORT_CLASS(nmpc_planner::NMPCPlanner, libmpc::LibMPCBase)

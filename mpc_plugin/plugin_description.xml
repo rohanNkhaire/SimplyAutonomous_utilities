@@ -1,0 +1,5 @@
+<library path="nmpc_planner">
+  <class name="nmpc_planner/NMPCPlanner" type="nmpc_planner::NMPCPlanner" base_class_type="libmpc::LibMPCBase">
+    <description>This is a NMPC planner plugin.</description>
+  </class>
+</library>

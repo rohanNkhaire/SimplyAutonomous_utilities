@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
-project(libmpc_plugin)
+project(mpc_plugin)
 
 # Enable C++20
-set(CMAKE_CXX_STANDARD 20)
+#set(CMAKE_CXX_STANDARD 20)
 # Enable optimization
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 # Disable eigen stack allocation warning
@@ -30,21 +30,32 @@ install(
   DESTINATION include
 )
 
-add_library(libmpc_plugin SHARED src/nmpc_planner.cpp)
-target_include_directories(libmpc_plugin PUBLIC
+add_library(nmpc_planner SHARED 
+          src/nmpc_planner.cpp)
+
+target_compile_features(nmpc_planner PUBLIC c_std_99 cxx_std_20)  # Require C99 and C++20
+target_compile_definitions(nmpc_planner PRIVATE "MPC_PLUGINS_BUILDING_LIBRARY")
+target_include_directories(nmpc_planner PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
 ament_target_dependencies(
-    libmpc_plugin
+    nmpc_planner
     pluginlib
-    mpc++
   )  
 
-pluginlib_export_plugin_description_file(libmpc_plugin plugins.xml)  
+ament_export_libraries(
+  nmpc_planner
+)
+
+ament_export_targets(
+  export_${PROJECT_NAME} HAS_LIBRARY_TARGET
+)
+  
+pluginlib_export_plugin_description_file(mpc_plugin plugin_description.xml)  
 
 install(
-  TARGETS libmpc_plugin
+  TARGETS nmpc_planner
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -52,14 +63,7 @@ install(
   INCLUDES DESTINATION include
 )
 
-target_link_libraries(${PROJECT_NAME} mpc++ Eigen3::Eigen)
+target_link_libraries(nmpc_planner Eigen3::Eigen)
 
-ament_export_libraries(
-  libmpc_plugin
-)
-
-ament_export_targets(
-  export_${PROJECT_NAME}
-)
 
 ament_package()
