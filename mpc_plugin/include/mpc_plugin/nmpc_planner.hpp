@@ -12,8 +12,8 @@ class NMPCPlanner : public libmpc::LibMPCBase
 
 			void initialize() override;
 			void stepController() override;
-			Eigen::MatrixXd getOptimalStates() override;
-			Eigen::MatrixXd getOptimalInputs() override;
+			void getOptimalStates(std::unique_ptr<Eigen::MatrixXd>&) override;
+			void getOptimalInputs(std::unique_ptr<Eigen::MatrixXd>&) override;
 			void setReference(const Eigen::VectorXd&) override;
 			void setStateInput(const Eigen::VectorXd&) override;
 
@@ -21,9 +21,9 @@ class NMPCPlanner : public libmpc::LibMPCBase
 			const static int num_states = 4;
 			const static int num_output = 2;
 			const static int num_inputs = 2;
-			const static int pred_hor = 30;
-			const static int ctrl_hor = 30;
-			const static int ineq_c = 0;
+			const static int pred_hor = 70;
+			const static int ctrl_hor = 70;
+			const static int ineq_c = (pred_hor + 1);
 			const static int eq_c = 0;
 			double ts = 0.1;
 			mpc::cvec<4> yref;

@@ -63,7 +63,7 @@ install(
   INCLUDES DESTINATION include
 )
 
-target_link_libraries(nmpc_planner Eigen3::Eigen)
+target_link_libraries(nmpc_planner Eigen3::Eigen mpc++)
 
 
 ament_package()
