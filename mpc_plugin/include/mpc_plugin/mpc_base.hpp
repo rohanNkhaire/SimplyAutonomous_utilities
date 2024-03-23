@@ -14,6 +14,7 @@ namespace libmpc
 		virtual void getOptimalStates(std::unique_ptr<Eigen::MatrixXd>&) = 0;
 		virtual void getOptimalInputs(std::unique_ptr<Eigen::MatrixXd>&) = 0;
 		virtual void setReference(const Eigen::VectorXd&) = 0; 
+		virtual void setTrajectory(const Eigen::MatrixXd&) = 0;
 		virtual void setStateInput(const Eigen::VectorXd&) = 0;
 		virtual ~LibMPCBase(){};
 

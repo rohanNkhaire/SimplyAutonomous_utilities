@@ -36,12 +36,14 @@ namespace nmpc_planner
         							for (int i = 0; i < (pred_hor + 1); ++i)
         							{
 													// State cost
-        							    cost += 2*(x.row(i).segment(0, 2).transpose() - yref.segment(0, 2)).squaredNorm();
+        							    cost += (x.row(i).segment(0, 2).transpose() - yref.segment(0, 2)).squaredNorm();
 													cost += (x.row(i).segment(2, 1).transpose() - yref.segment(2, 1)).squaredNorm();
-													cost += 1.5*(x.row(i).segment(3, 1).transpose() - yref.segment(3, 1)).squaredNorm();
+													//cost += (x.row(i).segment(3, 1).transpose() - yref.segment(3, 1)).squaredNorm();
 													// Input cost
-													cost += 1e-5*u.row(i).squaredNorm();
-													cost += i > 0 ? 1e-2*(u.row(i)-u.row(i-1)).squaredNorm() : u.row(i).squaredNorm();
+													cost += 1e-2*u.row(i).squaredNorm();
+													cost += i > 0 ? 1e-1*(u.row(i)-u.row(i-1)).squaredNorm() : u.row(i).squaredNorm();
+													// traj tracking lateral cost
+													cost += (x.row(i).segment(0,2).transpose() - trajxy.row(i).transpose()).squaredNorm();
 											}
         							return cost;
 											 });
@@ -54,15 +56,14 @@ namespace nmpc_planner
                                      const double &)
                                  {
         for (int i = 0; i < ineq_c; i++) {
-            in_con(i) = u(i, 0) - 1.25;
-			//in_con(i+1) = u(i, 1) - 0.5;
+            in_con(i) = u(i, 0) - 1.0;
         } });
 
 	}
 
 	void NMPCPlanner::stepController()
 	{
-		auto r = controller.getLastResult();
+		mpc::Result<2> r;
 		r = controller.step(modelX, r.cmd);
 		std::cout << r.cmd << "\n";
 	}
@@ -74,6 +75,11 @@ namespace nmpc_planner
 		std::cout << yref(1) << "\n";
 		std::cout << yref(2) << "\n";
 		std::cout << yref(3) << "\n";
+	}
+
+	void NMPCPlanner::setTrajectory(const Eigen::MatrixXd& traj_mat)
+	{
+		trajxy = traj_mat;
 	}
 
 	void NMPCPlanner::setStateInput(const Eigen::VectorXd& input_state)
