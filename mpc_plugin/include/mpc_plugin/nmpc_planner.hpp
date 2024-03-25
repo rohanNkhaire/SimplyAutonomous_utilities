@@ -28,7 +28,7 @@ class NMPCPlanner : public libmpc::LibMPCBase
 			const static int eq_c = 0;
 			double ts = 0.2;
 			mpc::cvec<4> yref;
-			mpc::mat<21, 2> trajxy;
+			mpc::mat<21, 3> trajxy;
 			mpc::NLMPC<
     					num_states, num_inputs, num_output,
     					pred_hor, ctrl_hor,

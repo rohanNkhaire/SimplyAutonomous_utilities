@@ -36,14 +36,20 @@ namespace nmpc_planner
         							for (int i = 0; i < (pred_hor + 1); ++i)
         							{
 													// State cost
-        							    cost += (x.row(i).segment(0, 2).transpose() - yref.segment(0, 2)).squaredNorm();
-													cost += (x.row(i).segment(2, 1).transpose() - yref.segment(2, 1)).squaredNorm();
+        							    cost += 1*(x.row(i).segment(0, 2).transpose() - yref.segment(0, 2)).squaredNorm();
+													
+													if (i == pred_hor)
+													{
+														cost += (x.row(i).segment(2, 1).transpose() - yref.segment(2, 1)).squaredNorm();
+													}
+													
 													//cost += (x.row(i).segment(3, 1).transpose() - yref.segment(3, 1)).squaredNorm();
 													// Input cost
-													cost += 1e-2*u.row(i).squaredNorm();
-													cost += i > 0 ? 1e-1*(u.row(i)-u.row(i-1)).squaredNorm() : u.row(i).squaredNorm();
+													cost += 0.05*u.row(i).squaredNorm();
+													cost += i > 0 ? 0.11*(u.row(i)-u.row(i-1)).squaredNorm() : 0.1*u.row(i).squaredNorm();
 													// traj tracking lateral cost
-													cost += (x.row(i).segment(0,2).transpose() - trajxy.row(i).transpose()).squaredNorm();
+													cost += 1*(x.row(i).segment(0,2).transpose() - trajxy.row(i).segment(0,2).transpose()).squaredNorm();
+													cost += 1000*(x.row(i).segment(2,1).transpose() - trajxy.row(i).segment(2,1).transpose()).squaredNorm();
 											}
         							return cost;
 											 });
